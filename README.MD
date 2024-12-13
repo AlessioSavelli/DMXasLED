@@ -54,4 +54,4 @@ Il diagramma del collegamento hardware è illustrato nella seguente immagine:
 
 ## Conclusione
 
-Questo schema e la guida aiuteranno a impostare correttamente il sistema per gestire le luci DMX con Arduino. In caso di dubbi, consulta la documentazione della libreria [DMXasLED](https://github.com/AlessioSavelli/DMXasLED).
+Questo schema e la guida aiuteranno a impostare correttamente il sistema per gestire le luci DMX con Arduino. In caso di dubbi, consulta la documentazione della libreria [DMXasLED](https://github.com/AlessioSavelli/DMXasLED/tree/main/DMXasLED).
