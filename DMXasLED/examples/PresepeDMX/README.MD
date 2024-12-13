@@ -40,7 +40,6 @@ Questo progetto utilizza un sistema di illuminazione DMX per creare effetti dina
       +-----------------------+       +-----------------------+
       
 
-
 1. **Setup iniziale**:
    - Configurazione del DMX e mappatura delle luci.
    - Definizione dei colori base per giorno, notte e fuoco.
@@ -104,6 +103,14 @@ Questo progetto utilizza un sistema di illuminazione DMX per creare effetti dina
 | **Giorno**   | Stabile (DayColor)                  | Spenta                     | Spenta               |
 | **Tramonto** | Decrescita (DayColor → NightColor)  | Crescita tremolante        | Spenta               |
 | **Notte**    | Stabile (NightColor)                | Tremolio continuo          | Flash casuali        |
+
+---
+
+## Esempio di Posizionamento delle Luci DMX
+
+Per un esempio pratico di posizionamento delle luci in un presepe, fai riferimento all'immagine seguente:
+
+![Esempio Posizionamento Luci Presepe](https://github.com/AlessioSavelli/DMXasLED/blob/main/DMXasLED/examples/PresepeDMX/EsempioLuciPresepe.jpg)
 
 ---
 
