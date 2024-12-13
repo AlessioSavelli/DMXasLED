@@ -32,18 +32,105 @@
 ## ⚙️ **Funzioni principali**
 
 ### 🖌️ Configurazione e controllo delle luci
-- **`begin(dmx_port, dmx_config)`**: Inizializza la libreria.
-- **`attachLight()`**: Configura un profilo luce con canali RGBW.
-- **`attachDefColor()`**: Imposta il colore predefinito (R, G, B, W, Dimmer).
+
+#### 1. **`begin(dmx_port, dmx_config)`**
+Inizializza la libreria DMX sulla porta specificata.
+
+- **Parametri**:
+  - `dmx_port`: Porta DMX su cui si avvia la comunicazione (es. `DMX_PORT`).
+  - `dmx_config`: Configurazione DMX da utilizzare (usa il valore predefinito se non specificato).
+
+- **Esempio**:
+  ```cpp
+  DMXasLED dmx(TX_PIN, RX_PIN, EN_PIN); // Crea un'istanza di DMXasLED
+  dmx.begin(DMX_PORT);                  // Inizializza il DMX sulla porta specificata
+  ```
+
+---
+
+#### 2. **`attachLight(const DMXLightMapping& LightProfile)`**
+Aggiunge un profilo luce al sistema DMX, specificando i canali da utilizzare.
+
+- **Parametri**:
+  - `LightProfile`: Struttura contenente la mappatura dell'indirizzo DMX e dei canali corrispondenti.
+
+- **Esempio**:
+  ```cpp
+  DMXLightMapping lightProfile = {0, 1, 2, 3, 4}; // Canali: Dimmer, R, G, B, W
+  dmx.attachLight(lightProfile);                 // Associa il profilo al DMX
+  ```
+
+---
+
+#### 3. **`attachDefColor(byte R, byte G, byte B, byte W, byte Dimmer=255)`**
+Imposta il colore di accensione predefinito per tutte le luci gestite dal sistema DMX.
+
+- **Parametri**:
+  - `R`, `G`, `B`, `W`: Valori dei canali colore (0-255).
+  - `Dimmer`: Intensità luminosa complessiva (0-255).
+
+- **Esempio**:
+  ```cpp
+  dmx.attachDefColor(255, 127, 50, 0, 255); // Rosso acceso, Verde medio, Blu minimo
+  ```
+
+---
 
 ### 💡 Gestione diretta
-- **`digitalDmxWrite()`**: Accende o spegne una luce DMX.
-- **`digitalDmxWriteP()`**: Gestisce luci utilizzando profili DMX.
+
+#### 4. **`digitalDmxWrite(unsigned int lightAddr, byte R, byte G, byte B, byte W, byte Dimmer=255)`**
+Scrive i valori RGBW e Dimmer per una luce all'indirizzo DMX specificato.
+
+- **Parametri**:
+  - `lightAddr`: Indirizzo DMX della luce.
+  - `R`, `G`, `B`, `W`: Componenti colore (0-255).
+  - `Dimmer`: Intensità luminosa complessiva (default 255).
+
+- **Esempio**:
+  ```cpp
+  dmx.digitalDmxWrite(1, 255, 0, 0, 0, 255); // Luce rossa accesa al massimo
+  ```
+
+---
+
+#### 5. **`digitalDmxWriteP(unsigned int profileAddr, byte R, byte G, byte B, byte W, byte Dimmer=255)`**
+Scrive i valori RGBW e Dimmer per una luce utilizzando un profilo di luce predefinito.
+
+- **Parametri**:
+  - `profileAddr`: Indirizzo DMX del profilo luce.
+  - `R`, `G`, `B`, `W`: Componenti colore (0-255).
+  - `Dimmer`: Intensità luminosa complessiva (default 255).
+
+- **Esempio**:
+  ```cpp
+  dmx.digitalDmxWriteP(profileIndex, 0, 255, 0, 0, 255); // Luce verde accesa al massimo
+  ```
+
+---
 
 ### 🔄 Aggiornamenti e mapping
-- **`update()`**: Invia i dati DMX aggiornati.
-- **`getProfilesCount()`**: Restituisce il numero di profili caricati.
 
+#### 6. **`update()`**
+Invia i dati DMX aggiornati a tutte le luci e dispositivi configurati. Deve essere chiamato periodicamente per mantenere sincronizzati gli stati.
+
+- **Esempio**:
+  ```cpp
+  dmx.update(); // Aggiorna tutti i dati DMX
+  ```
+
+---
+
+#### 7. **`getProfilesCount()`**
+Restituisce il numero di profili caricati nel sistema. Utile per gestire dinamicamente i profili.
+
+- **Esempio**:
+  ```cpp
+  unsigned int profileCount = dmx.getProfilesCount();
+  Serial.print("Numero di profili: ");
+  Serial.println(profileCount);
+  ```
+
+---
 ---
 
 ## 📂 **Esempi inclusi**
