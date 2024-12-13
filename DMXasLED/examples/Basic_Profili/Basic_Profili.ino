@@ -37,7 +37,7 @@ void setup() {
 
 void loop() { 
   // Esempio di scrittura colori
-  dmx.digitalDmxWriteP()(index_profilo, 255, 0, 0, 0);  // Colore rosso
+  dmx.digitalDmxWriteP(index_profilo, 255, 0, 0, 0);  // Colore rosso
   delay(1000);
   // Esempio di scrittura colori
   dmx.digitalDmxWriteP(index_profilo, 0, 255, 0, 0);  // Colore verde
