@@ -110,7 +110,7 @@ Questo progetto utilizza un sistema di illuminazione DMX per creare effetti dina
 
 Per un esempio pratico di posizionamento delle luci in un presepe, fai riferimento all'immagine seguente:
 
-![Esempio Posizionamento Luci Presepe](https://github.com/AlessioSavelli/DMXasLED/blob/main/DMXasLED/examples/PresepeDMX/EsempioLuciPresepe.jpg)
+![Esempio Posizionamento Luci Presepe](https://github.com/AlessioSavelli/DMXasLED/blob/main/examples/PresepeDMX/EsempioLuciPresepe.jpg)
 
 ---
 

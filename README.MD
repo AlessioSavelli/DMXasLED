@@ -1,57 +1,182 @@
-# Collegamento Hardware per la Gestione delle Luci DMX
+# **DMXasLED**
 
-Questo progetto utilizza un modulo RS485 per controllare una luce DMX tramite Arduino. Di seguito viene illustrato il collegamento hardware necessario e il funzionamento del sistema.
-## Componenti Necessari
+**DMXasLED** è una libreria progettata per controllare luci e dispositivi DMX tramite microcontrollori ESP32. Semplifica la gestione di sistemi di illuminazione professionale utilizzando il protocollo DMX.
 
-1. **Modulo RS485** per la comunicazione DMX
-2. **Luce DMX** compatibile con il protocollo DMX512
-3. **ESP32** (o microcontrollore freeRTOS compatibile)
-4. **Resistenze di terminazione** (se necessarie, per lunghe tratte DMX)
-5. **Cavi di collegamento**
+---
 
-## Descrizione del Collegamento
+## 🌟 **Caratteristiche principali**
+- ✅ Supporto completo per ESP32 tramite DMX.
+- 🎨 Gestione colori RGB, RGBW e dimmer.
+- 📂 Salvataggio e caricamento di profili tramite SPIFFS *(in fase di realizzazione)*.
+- 🛠️ Comunicazione seriale per monitoraggio e debugging *(in fase di realizzazione)*.
 
-### 1. Connessioni del Modulo RS485
 
-Il modulo RS485 è essenziale per la comunicazione tra Arduino e il sistema DMX. I collegamenti principali sono:
+---
 
-- **TX (Trasmissione)**: collegato al pin 3 di Arduino
-- **RX (Ricezione)**: collegato al pin 4 di Arduino
-- **EN (Abilitazione)**: collegato al pin 5 di Arduino
-- **VCC**: alimentazione (5V o 3.3V, a seconda del modulo)
-- **GND**: massa comune
+## 🚀 **Installazione**
 
-### 2. Uscita DMX dal Modulo RS485
+### Metodo 1: Installazione manuale
+1. Scarica o clona questo repository.
+2. Copia la cartella `DMXasLED` nella directory `libraries` del tuo ambiente Arduino:
+   - **Windows**: `Documents\Arduino\libraries`
+   - **macOS/Linux**: `~/Arduino/libraries`
+3. Riavvia Arduino IDE per caricare la libreria.
 
-- **D+ e D-**: questi pin sono collegati ai cavi di ingresso del sistema DMX.
-- **GND**: massa comune con il sistema DMX.
+### Metodo 2: Library Manager
+1. Apri Arduino IDE.
+2. Vai su **Sketch** > **Include Library** > **Manage Libraries...**.
+3. Cerca "DMXasLED" e clicca su **Install**.
 
-### 3. Collegamento alla Luce DMX
+---
 
-Ogni luce DMX deve essere configurata con un indirizzo unico utilizzando i DIP switch o il pannello di configurazione integrato. Segui il manuale della luce per configurare correttamente l'indirizzo.
+## ⚙️ **Funzioni principali**
 
-### 4. Alimentazione
+### 🖌️ Configurazione e controllo delle luci
 
-Assicurati che tutti i dispositivi condividano una massa comune (GND) per un funzionamento corretto. Se necessario, utilizza un alimentatore esterno per il modulo RS485 o la luce DMX.
+#### 1. **`begin(dmx_port, dmx_config)`**
+Inizializza la libreria DMX sulla porta specificata.
 
-## Schema di Collegamento
+- **Parametri**:
+  - `dmx_port`: Porta DMX su cui si avvia la comunicazione (es. `DMX_PORT`).
+  - `dmx_config`: Configurazione DMX da utilizzare (usa il valore predefinito se non specificato).
 
-Il diagramma del collegamento hardware è illustrato nella seguente immagine:
+- **Esempio**:
+  ```cpp
+  DMXasLED dmx(TX_PIN, RX_PIN, EN_PIN); // Crea un'istanza di DMXasLED
+  dmx.begin(DMX_PORT);                  // Inizializza il DMX sulla porta specificata
+  ```
 
-![Schema Collegamento Hardware](https://github.com/AlessioSavelli/DMXasLED/blob/main/Schema.jpg?raw=true)
+---
 
-## Configurazione del Sistema DMX
+#### 2. **`attachLight(const DMXLightMapping& LightProfile)`**
+Aggiunge un profilo luce al sistema DMX, specificando i canali da utilizzare.
 
-1. Configura il modulo RS485 come descritto sopra.
-2. Collega le luci DMX e assegna gli indirizzi corretti.
-3. Carica il codice Arduino (presente in questo repository) per testare il sistema.
-4. Verifica il corretto funzionamento controllando il lampeggio delle luci.
+- **Parametri**:
+  - `LightProfile`: Struttura contenente la mappatura dell'indirizzo DMX e dei canali corrispondenti.
 
-## Nota Importante
+- **Esempio**:
+  ```cpp
+  DMXLightMapping lightProfile = {0, 1, 2, 3, 4}; // Canali: Dimmer, R, G, B, W
+  dmx.attachLight(lightProfile);                 // Associa il profilo al DMX
+  ```
 
-- Segui il manuale della luce DMX per configurare correttamente i canali e i parametri richiesti.
-- Per connessioni lunghe, considera l'uso di resistenze di terminazione (120 ohm) tra D+ e D- per evitare riflessioni del segnale.
+---
 
-## Conclusione
+#### 3. **`attachDefColor(byte R, byte G, byte B, byte W, byte Dimmer=255)`**
+Imposta il colore di accensione predefinito per tutte le luci gestite dal sistema DMX.
 
-Questo schema e la guida aiuteranno a impostare correttamente il sistema per gestire le luci DMX con Arduino. In caso di dubbi, consulta la documentazione della libreria [DMXasLED](https://github.com/AlessioSavelli/DMXasLED/tree/main/DMXasLED).
+- **Parametri**:
+  - `R`, `G`, `B`, `W`: Valori dei canali colore (0-255).
+  - `Dimmer`: Intensità luminosa complessiva (0-255).
+
+- **Esempio**:
+  ```cpp
+  dmx.attachDefColor(255, 127, 50, 0, 255); // Rosso acceso, Verde medio, Blu minimo
+  ```
+
+---
+
+### 💡 Gestione diretta
+
+#### 4. **`digitalDmxWrite(unsigned int lightAddr, byte R, byte G, byte B, byte W, byte Dimmer=255)`**
+Scrive i valori RGBW e Dimmer per una luce all'indirizzo DMX specificato.
+
+- **Parametri**:
+  - `lightAddr`: Indirizzo DMX della luce.
+  - `R`, `G`, `B`, `W`: Componenti colore (0-255).
+  - `Dimmer`: Intensità luminosa complessiva (default 255).
+
+- **Esempio**:
+  ```cpp
+  dmx.digitalDmxWrite(1, 255, 0, 0, 0, 255); // Luce rossa accesa al massimo
+  ```
+
+---
+
+#### 5. **`digitalDmxWriteP(unsigned int profileAddr, byte R, byte G, byte B, byte W, byte Dimmer=255)`**
+Scrive i valori RGBW e Dimmer per una luce utilizzando un profilo di luce predefinito.
+
+- **Parametri**:
+  - `profileAddr`: Indirizzo DMX del profilo luce.
+  - `R`, `G`, `B`, `W`: Componenti colore (0-255).
+  - `Dimmer`: Intensità luminosa complessiva (default 255).
+
+- **Esempio**:
+  ```cpp
+  dmx.digitalDmxWriteP(profileIndex, 0, 255, 0, 0, 255); // Luce verde accesa al massimo
+  ```
+
+---
+
+### 🔄 Aggiornamenti e mapping
+
+#### 6. **`update()`**
+Invia i dati DMX aggiornati a tutte le luci e dispositivi configurati. Deve essere chiamato periodicamente per mantenere sincronizzati gli stati.
+
+- **Esempio**:
+  ```cpp
+  dmx.update(); // Aggiorna tutti i dati DMX
+  ```
+
+---
+
+#### 7. **`getProfilesCount()`**
+Restituisce il numero di profili caricati nel sistema. Utile per gestire dinamicamente i profili.
+
+- **Esempio**:
+  ```cpp
+  unsigned int profileCount = dmx.getProfilesCount();
+  Serial.print("Numero di profili: ");
+  Serial.println(profileCount);
+  ```
+
+---
+---
+
+## 📂 **Esempi inclusi**
+
+### 1. [**BlinkDMX**](https://github.com/AlessioSavelli/DMXasLED/tree/main/examples/BlinkDMX)
+- Esempio base per accendere e spegnere una luce DMX.
+- Configura un indirizzo DMX e invia comandi ON/OFF.
+- Ideale per principianti.
+
+### 2. [**BlinkDMX2**](https://github.com/AlessioSavelli/DMXasLED/tree/main/examples/BlinkDMX2)
+- Utilizza **profili DMX** per gestire luci RGBW.
+- Cambia i colori (Rosso, Verde, Blu, Bianco) in sequenza.
+- Perfetto per chi necessita di configurazioni modulari.
+
+### 3. [**PresepeDMX**](https://github.com/AlessioSavelli/DMXasLED/tree/main/examples/PresepeDMX)
+- Esempio complesso con effetti dinamici.
+- Simula transizioni tra alba, giorno, tramonto e notte.
+- Include tremolio del fuoco e flash casuali di una luce "stella".
+
+### 3. [**Configurazione Hardware**](https://github.com/AlessioSavelli/DMXasLED/tree/main/docs/)
+
+---
+
+## 📜 **Versionamento**
+
+- **Versione attuale**: 1.0.0
+- **Changelog**:
+  - **1.0.0**: Rilascio iniziale con supporto per profili DMX, controllo RGBW e gestione di transizioni.
+
+---
+
+## 📝 **TODO**
+- 📂 **Supporto SPIFFS**: Implementazione completa per salvataggio e caricamento di profili.
+- 🛠️ **Debugging seriale avanzato**: Miglioramento della comunicazione seriale per monitoraggio in tempo reale.
+- 💻 **Software di gestione profili**: Prossimamente, sarà disponibile un software per Windows che, insieme alla seriale, consentirà di:
+  - Caricare nuovi profili direttamente da PC.
+  - Modificare i profili esistenti in modo semplice e rapido.
+---
+
+## 📧 **Contatti**
+
+- **Autore**: Alessio Savelli
+- **Email**: [alessioneplus@gmail.com](mailto:alessioneplus@gmail.com)
+
+💡 Se hai domande o suggerimenti, sentiti libero di aprire una issue o inviare una pull request. 
+
+---
+
+📜 Distribuito sotto la licenza **MIT**. Vedi il file `LICENSE` per i dettagli.
