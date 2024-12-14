@@ -173,7 +173,6 @@ Restituisce il numero di profili caricati nel sistema. Utile per gestire dinamic
 ## 📧 **Contatti**
 
 - **Autore**: Alessio Savelli
-- **Email**: [alessioneplus@gmail.com](mailto:alessioneplus@gmail.com)
 
 💡 Se hai domande o suggerimenti, sentiti libero di aprire una issue o inviare una pull request. 
 

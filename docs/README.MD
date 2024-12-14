@@ -38,7 +38,7 @@ Assicurati che tutti i dispositivi condividano una massa comune (GND) per un fun
 
 Il diagramma del collegamento hardware è illustrato nella seguente immagine:
 
-![Schema Collegamento Hardware](https://github.com/AlessioSavelli/DMXasLED/blob/main/Schema.jpg?raw=true)
+![Schema Collegamento Hardware](https://github.com/AlessioSavelli/DMXasLED/blob/main/docs/Schema.jpg?raw=true)
 
 ## Configurazione del Sistema DMX
 
